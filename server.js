@@ -39,7 +39,7 @@ const port = 3000;
 const CLIENT_ID = '1494925224515211264'; 
 const CLIENT_SECRET = 'MAXX'; 
 const REDIRECT_URI = 'http://localhost:3000/callback';
-const BOT_TOKEN = 'MTQ5NDkyNTIyNDUxNTIxMTI2NA.GtatX9.VK4c78Yqe7kidpQoSIB_nTMWf5RaHuGwWNQwBU'; 
+const token = process.env.DISCORD_TOKEN;
 
 let usuarioLogado = null;
 
