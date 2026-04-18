@@ -21,8 +21,6 @@ let usuarioLogado = null;
 
 require('dotenv').config();
 
-const BOT_TOKEN = process.env.BOT_TOKEN; 
-
 const express = require('express');
 const http = require('http'); 
 const { Server } = require('socket.io'); 
