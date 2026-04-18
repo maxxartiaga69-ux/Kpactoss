@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const http = require('http'); 
-const { Server } = require('socket.io'); 
+const http = require('http');
+const { Server } = require('socket.io');
 const axios = require('axios');
 const path = require('path');
 const { Client, GatewayIntentBits } = require('discord.js');
@@ -11,39 +11,17 @@ const server = http.createServer(app);
 const io = new Server(server);
 const port = process.env.PORT || 3000;
 
-// --- CONFIGURAÇÃO DISCORD (PUXANDO DO .ENV) ---
-const CLIENT_ID = process.env.CLIENT_ID; 
-const CLIENT_SECRET = process.env.CLIENT_SECRET; 
-const REDIRECT_URI = 'http://localhost:3000/callback';
-const BOT_TOKEN = process.env.BOT_TOKEN;
-
-let usuarioLogado = null;
-
-require('dotenv').config();
-
-const express = require('express');
-const http = require('http'); 
-const { Server } = require('socket.io'); 
-const axios = require('axios');
-const path = require('path');
-const { Client, GatewayIntentBits } = require('discord.js'); // Importa o Discord.js
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-const port = 3000;
-
-// --- CONFIGURAÇÃO DISCORD (COLOQUE SEUS DADOS AQUI) ---
-const CLIENT_ID = '1494925224515211264'; 
-const CLIENT_SECRET = 'MAXX'; 
-const REDIRECT_URI = 'http://localhost:3000/callback';
-const token = process.env.DISCORD_TOKEN;
+// --- CONFIGURAÇÃO DISCORD ---
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:3000/callback';
+const BOT_TOKEN = process.env.BOT_TOKEN || process.env.DISCORD_TOKEN;
 
 let usuarioLogado = null;
 
 app.use(express.static(__dirname));
 
-// --- LÓGICA DO BOT DO DISCORD ---
+// --- BOT DO DISCORD ---
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -56,10 +34,8 @@ client.on('ready', () => {
     console.log(`🤖 Bot logado como ${client.user.tag}!`);
 });
 
-// Quando alguém manda mensagem no Discord, o bot envia para o Site:
 client.on('messageCreate', (message) => {
-    if (message.author.bot) return; // Ignora mensagens de outros bots
-
+    if (message.author.bot) return;
     io.emit('chat message', {
         user: message.author.username,
         text: message.content
@@ -68,7 +44,7 @@ client.on('messageCreate', (message) => {
 
 client.login(BOT_TOKEN);
 
-// --- ROTAS DO SITE E LOGIN ---
+// --- ROTAS ---
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
